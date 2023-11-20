@@ -50,8 +50,8 @@ window.addEventListener('load',function(){
     class Player {
         constructor(game){
             this.game = game;
-            this.width= 120;
-            this.height= 190;
+            this.width= 50;
+            this.height= 100;
             this.x= 20;
             this.y= 100;
             this.speedY= 0;
@@ -87,9 +87,9 @@ window.addEventListener('load',function(){
         constructor(game){
             this.game = game;
             this.x = this.game.width;
-            this.speedX = Math.random() * -1.5 -0.5;
+            this.speedX = Math.random() * -0.8 -0.2;
             this.markedForDeletion = false;
-            this.lives= 5;
+            this.lives= 3;
             this.score = this.lives;
         }
         update(){
