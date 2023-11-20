@@ -87,7 +87,7 @@ window.addEventListener('load',function(){
         constructor(game){
             this.game = game;
             this.x = this.game.width;
-            this.speedX = Math.random() * -0.8 -0.2;
+            this.speedX = Math.random() * -0.6 -0.1;
             this.markedForDeletion = false;
             this.lives= 3;
             this.score = this.lives;
@@ -108,7 +108,7 @@ window.addEventListener('load',function(){
     class Angler1 extends Enemy {
         constructor(game){
             super(game);
-            this.width= 228 *0.4 ;
+            this.width= 228 *0.3 ;
             this.height= 169*0.3 ;
             this.y = Math.random() * (this.game.height * 0.9 - this.height);
         }
@@ -124,13 +124,40 @@ window.addEventListener('load',function(){
             this.game = game;
             this.fontSize = 25;
             this.fontFamily = 'Helvetica';
-            this.color = 'yellow';
+            this.color = 'white';
         }
         draw(context){
+            context.save();
             context.fillStyle=this.color;
+            context.shadowOffsetX = 2;
+            context.shadowOffsetY = 2;
+            context.shadowColor = "black";
+            context.font = this.fontSize + "px" + this.fontFamily;
+            //score
+            context.fillText("Score : "+ this.game.score, 20, 40);
+            //ammo
+            
             for(let i = 0;i< this.game.ammo;i++){
-                context.fillRect(20 + 5*i, 10, 3, 30);
+                context.fillRect(20 + 5*i, 50, 3, 20);
             }
+            // game over messages
+            if (this.game.gameOver){
+                context.textAlign = "center";
+                let message1;
+                let message2;
+                if(this.game.score > this.game.winningscore){
+                    message1 = "You Win!";
+                    message2 = "Well Done.";
+                } else {
+                    message1 = "You Lose!";
+                    message2 = "Try Again Next Time.";
+                }
+                context.font = "50px" + this.fontFamily;
+                context.fillText(message1, this.game.width * 0.5, this.game.height * 0.5 - 50);
+                context.font = "30px" + this.fontFamily;
+                context.fillText(message2, this.game.width * 0.5, this.game.height * 0.5 + 50);
+            }
+            context.restore();
         }
     }
     class Game{
@@ -149,6 +176,8 @@ window.addEventListener('load',function(){
             this.ammoTimer = 0;
             this.ammoInterval = 500;
             this.gameOver = false;
+            this.score = 0;
+            this.winningscore = 10;
 
         }
         update(deltaTime){
@@ -174,6 +203,7 @@ window.addEventListener('load',function(){
                         if(enemy.lives <= 0){
                             enemy.markedForDeletion = true;
                             this.score += enemy.score;
+                            if(this.score>this.winningscore) this.gameOver = true;
                         }
                     }
                 })
