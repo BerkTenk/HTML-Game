@@ -238,10 +238,25 @@ window.addEventListener('load', function () {
             this.y = Math.random() * (this.game.height * 0.95 - this.height);
             this.image = document.getElementById("hivewhale");
             this.frameY = 0;
-            this.lives = 15;
-            this.score = this.lives * 5;
+            this.lives = 10;
+            this.score = this.lives * 2;
             this.type = "hive";
             this.speedX = Math.random() * -0.6 - 0.2;
+        }
+    }
+    class Drone extends Enemy {
+        constructor(game, x, y) {
+            super(game);
+            this.width = 115;
+            this.height = 95;
+            this.x = x;
+            this.y = y;
+            this.image = document.getElementById("drone");
+            this.frameY = Math.floor(Math.random() * 2);
+            this.lives = 2;
+            this.score = this.lives;
+            this.type = "drone";
+            this.speedX = Math.random() * -3.2 - 0.5;
         }
     }
     class Layer {
@@ -348,9 +363,9 @@ window.addEventListener('load', function () {
             this.ammoInterval = 500;
             this.gameOver = false;
             this.score = 0;
-            this.winningscore = 20;
+            this.winningscore = 100;
             this.gameTime = 0;
-            this.timeLimit = 20000;
+            this.timeLimit = 60000;
             this.speed = 1;
             this.debug = false;
 
@@ -386,11 +401,16 @@ window.addEventListener('load', function () {
                     if (this.checkCollision(projectile, enemy)) {
                         enemy.lives--;
                         projectile.markedForDeletion = true;
-                        this.particles.push(new Particle(this, enemy.x+enemy.width * 0.5, enemy.y+enemy.height*0.5));
+                        this.particles.push(new Particle(this, enemy.x + enemy.width * 0.5, enemy.y + enemy.height * 0.5));
                         if (enemy.lives <= 0) {
+                            for(let i = 0; i < 6 ; i++){
+                                this.particles.push(new Particle(this, enemy.x+ Math.random() * enemy.width, enemy.y+ Math.random() * enemy.height * 0.5));
+                            }
                             enemy.markedForDeletion = true;
-                            for(let i = 0;i<6;i++){
-                                this.particles.push(new Particle(this, enemy.x+enemy.width * 0.5, enemy.y+enemy.height*0.5));
+                            if(enemy.type === "hive") {
+                                for(let i = 0; i < 3; i++){
+                                    this.enemies.push(new Drone(this, enemy.x + Math.random() * enemy.width, enemy.y + Math.random() * enemy.height * 0.5));
+                                }
                             }
                             if (!this.gameOver) this.score += enemy.score;
                             if (this.score > this.winningscore) this.gameOver = true;
