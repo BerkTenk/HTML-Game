@@ -1,7 +1,7 @@
 window.addEventListener('load', function () {
     const canvas = this.document.getElementById("canvas1");
     const ctx = canvas.getContext('2d');
-    canvas.width = 500;
+    canvas.width = 1000;
     canvas.height = 500;
 
     class InputHandler {
@@ -165,7 +165,7 @@ window.addEventListener('load', function () {
         constructor(game) {
             this.game = game;
             this.x = this.game.width;
-            this.speedX = Math.random() * -0.6 - 0.1;
+            this.speedX = Math.random() * -2.6 - 0.5;
             this.markedForDeletion = false;
             this.lives = 3;
             this.score = this.lives;
@@ -256,7 +256,7 @@ window.addEventListener('load', function () {
             this.lives = 2;
             this.score = this.lives;
             this.type = "drone";
-            this.speedX = Math.random() * -3.2 - 0.5;
+            this.speedX = Math.random() * -3.8 - 0.5;
         }
     }
     class Layer {
@@ -403,7 +403,7 @@ window.addEventListener('load', function () {
             this.particles = [];
             this.explosions = [];
             this.enemyTimer = 0;
-            this.enemyInterval = 1000;
+            this.enemyInterval = 2000;
             this.ammo = 20;
             this.maxAmmo = 50;
             this.ammoTimer = 0;
@@ -445,7 +445,7 @@ window.addEventListener('load', function () {
                         this.particles.push(new Particle(this, enemy.x+enemy.width * 0.5, enemy.y+enemy.height*0.5));
                     }
                     if (enemy.type === "lucky") this.player.enterPowerUp();
-                    else this.score--;
+                    else if(!this.gameOver) this.score--;
                 }
                 this.player.projectiles.forEach(projectile => {
                     if (this.checkCollision(projectile, enemy)) {
